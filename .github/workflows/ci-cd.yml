@@ -95,7 +95,7 @@ jobs:
           set -euo pipefail
           ssh -o IdentitiesOnly=no -o StrictHostKeyChecking=yes \
               ec2-user@"$HOST" "IMAGE='$IMAGE' APP_PORT='$APP_PORT' bash -s" << 'EOF'
-          set -euxo piperfail 
+          set -euxo pipefail 
           if command -v systemctl >/dev/null 2>&1; then
              sudo systemctl start docker || true
           else 
