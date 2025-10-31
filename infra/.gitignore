@@ -1,0 +1,5 @@
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+id_rsa_ci
+id_rsa_ci.pub
