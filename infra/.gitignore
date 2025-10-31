@@ -1,5 +1,15 @@
+# Terraform
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
+terraform.tfvars
+.terraform.lock.hcl
+crash.log
+
+# Keys
 id_rsa_ci
 id_rsa_ci.pub
+*.pem
+*.key
+
+

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro de Clientes</title>
+</head>
+<body>
+  <h1>Registrar Cliente</h1>
+  <form id="clienteForm">
+    <label>Nombre:</label>
+    <input type="text" id="nombre" required /><br/>
+    <label>Email:</label>
+    <input type="email" id="email" required /><br/>
+    <button type="submit">Registrar</button>
+  </form>
+
+  <h2>Lista de Clientes</h2>
+  <ul id="clientesList"></ul>
+
+  <script>
+    const form = document.getElementById("clienteForm");
+    const list = document.getElementById("clientesList");
+    const apiUrl = "http://<EC2_PUBLIC_IP>:3000/clientes"; // reemplaza con tu IP pública
+
+    // Mostrar clientes existentes
+    async function loadClientes() {
+      const res = await fetch(apiUrl);
+      const clientes = await res.json();
+      list.innerHTML = "";
+      clientes.forEach(c => {
+        const li = document.createElement("li");
+        li.textContent = `${c.nombre} - ${c.email}`;
+        list.appendChild(li);
+      });
+    }
+
+    // Enviar POST al backend
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const email = document.getElementById("email").value;
+
+      await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, email })
+      });
+
+      form.reset();
+      loadClientes();
+    });
+
+    loadClientes();
+  </script>
+</body>
+</html>

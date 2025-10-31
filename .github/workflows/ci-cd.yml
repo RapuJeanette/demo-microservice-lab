@@ -33,8 +33,17 @@ jobs:
         - name: Instalar dependencias 
           run: npm install 
 
+        - name: Instalar Docker Compose
+          run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+        - name: Levantar servicios (node + PostgreSQL)
+          run: docker-compose -f ../docker-compose.yml up -d
+
         - name: Ejecturar las pruebas 
           run: npm test 
+
+        - name: Detener servicios
+          run: docker-compose -f ../docker-compose.yml down
 
         - name: Iniciar sesion en Docker Hub 
           # Usar las credenciales de token de secret 
