@@ -1,38 +1,35 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import pg from 'pg';
 
-// Configuración de la conexión con PostgreSQL usando variables de entorno
+const { Pool } = pg;
+
+// Configuración de la conexión con PostgreSQL
 const pool = new Pool({
-  host: process.env.DATABASE_HOST || 'db', // db es el nombre del servicio en docker-compose
+  host: process.env.DATABASE_HOST || 'db',
   port: process.env.DATABASE_PORT || 5432,
   user: process.env.DATABASE_USER || 'admin',
   password: process.env.DATABASE_PASSWORD || 'admin123',
   database: process.env.DATABASE_NAME || 'clientes_db',
 });
 
-// Función para inicializar la base de datos y crear la tabla si no existe
+// Inicializar base de datos
 const initDB = async () => {
   try {
-    await pool.connect();
-    console.log('Conectado a PostgreSQL');
-
-    const createTableQuery = `
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS clientes (
         id SERIAL PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-    `;
-    await pool.query(createTableQuery);
-    console.log('Tabla "clientes" creada o ya existente');
+    `);
+    console.log('✅ Base de datos inicializada');
   } catch (err) {
-    console.error('Error al inicializar la base de datos:', err);
+    console.error('❌ Error al inicializar la base de datos:', err);
     process.exit(1);
   }
 };
 
-// Inicializar base de datos al importar el módulo
 initDB();
 
-module.exports = pool;
+export default pool;
+
