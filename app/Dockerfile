@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apk add --no cache postgresql-client
 
 COPY . .
 
