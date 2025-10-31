@@ -1,16 +1,22 @@
 import express from 'express';
+import bodyParser from 'body-parser'
 import path from 'path';
 import pool from './db.js';
+import { fileURLToPath } from 'url'
 
 const app = express();
-app.use(express.json());
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-app.use(express.static(path.join(path.resolve(), 'public')));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get("/", (_req, res)=>{
     // responde con un json que tendra status
     res.json({status: "ok", service: "Hola Microservicio"});
 });
+
+app.use('/form', express.static(path.join(__dirname, 'public')))
 
 app.get('/clientes', async (_req, res) => {
   try {
